@@ -23,6 +23,21 @@ spring:
               uri: lb://buscador
               predicates:
                 - Path=/items/**
+          # 🔹 CORS global para el Gateway (CORREGIDO)
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                  - "https://tienda-online-react-unir-uriel-mart.vercel.app"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+                allowCredentials: true
 
 eureka:
   client:
