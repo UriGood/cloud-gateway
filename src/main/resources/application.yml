@@ -16,14 +16,13 @@ spring:
               lower-case-service-id: true
           routes:
             - id: operador
-              uri: lb://operador
+              uri: lb://OPERADOR
               predicates:
                 - Path=/compras/**
             - id: buscador
-              uri: lb://buscador
+              uri: lb://BUSCADOR
               predicates:
                 - Path=/items/**
-          # 🔹 CORS global para el Gateway (CORREGIDO)
           globalcors:
             cors-configurations:
               '[/**]':
