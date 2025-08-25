@@ -4,52 +4,40 @@ server:
 spring:
   application:
     name: cloud-gateway
-  main:
-    web-application-type: reactive
+
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: buscador
+          uri: lb://buscador
+          predicates:
+            - Path=/items/**
+        - id: operador
+          uri: lb://operador
+          predicates:
+            - Path=/compras/**
       server:
         webflux:
-          discovery:
-            locator:
-              enabled: true
-              lower-case-service-id: true
-          routes:
-            - id: operador
-              uri: lb://OPERADOR
-              predicates:
-                - Path=/compras/**
-            - id: buscador
-              uri: lb://BUSCADOR
-              predicates:
-                - Path=/items/**
           globalcors:
             cors-configurations:
               '[/**]':
                 allowedOrigins:
                   - "http://localhost:5173"
                   - "https://tienda-online-react-unir-uriel-mart.vercel.app"
-                allowedMethods:
-                  - GET
-                  - POST
-                  - PUT
-                  - DELETE
-                  - OPTIONS
+                allowedMethods: "*"
                 allowedHeaders: "*"
                 allowCredentials: true
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     prefer-ip-address: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,gateway,metrics,env
-  endpoint:
-    gateway:
-      access: read-only
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
